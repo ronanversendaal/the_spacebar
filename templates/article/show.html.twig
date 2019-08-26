@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block body %}
+{# Use these tags to comment. #}
+
+
+{# Use {{  }} these to print something. #}
+<h1>{{ title }}</h1>
+
+
+{# and {%  %} these for using functions. #}
+<h2>Comments ({{ comments | length }})</h2>
+
+<ul>
+{% for comment in comments %}
+    <li>{{ comment }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
