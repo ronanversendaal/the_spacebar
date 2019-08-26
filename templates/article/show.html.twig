@@ -1,18 +1,22 @@
 {% extends 'base.html.twig' %}
 
+{# Override default block. #}
 {% block title %} {{ title }} {% endblock %}
 
+{# Main content. #}
 {% block body %}
-{# Use these tags to comment. #}
+
+{#{{ dump()}} #}
+{# Runs out of memory without xdebug #}
 
 
 {# Use {{  }} these to print something. #}
 <h1>{{ title }}</h1>
 
-
-{# and {%  %} these for using functions. #}
+{# and pipe the output to a filter. #}
 <h2>Comments ({{ comments | length }})</h2>
 
+{# and {%  %} these for using functions. #}
 <ul>
 {% for comment in comments %}
     <li>{{ comment }}</li>
