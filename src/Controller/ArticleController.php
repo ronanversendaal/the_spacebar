@@ -49,7 +49,7 @@ class ArticleController extends AbstractController
     {
         // TODO - actually heart/unheart the article!
 
-        $logger->info('Run ./bin/console debug:autowiring to see the services you can inject.');
+        $logger->info('Run ./bin/console debug:autowiring to see the services you can inject.'); 
 
         return $this->json(['hearts' => random_int(5, 100)]);
     }
