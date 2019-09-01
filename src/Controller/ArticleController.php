@@ -4,10 +4,10 @@
 namespace App\Controller;
 
 
+use App\Service\MarkdownHelper;
 use Michelf\MarkdownInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,7 +28,7 @@ class ArticleController extends AbstractController
      * @param MarkdownInterface $markdown
      * @return Response
      */
-    public function show($slug, MarkdownInterface $markdown, AdapterInterface $cache)
+    public function show($slug, MarkdownHelper $markdownHelper)
     {
         $comments = [
             'Comment 1',
@@ -53,13 +53,7 @@ cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim ca
 fugiat.
 EOF;
 
-        $item = $cache->getItem('markdown_'.md5($articleContent));
-
-        if(!$item->isHit()) {
-            $item->set($markdown->transform($articleContent));
-            $cache->save($item);
-        }
-        $articleContent = $item->get();
+        $articleContent = $markdownHelper->parse($articleContent);
 
         return $this->render('article/show.html.twig', [
             'slug' => $slug,
