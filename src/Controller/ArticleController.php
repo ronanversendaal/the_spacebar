@@ -5,8 +5,8 @@ namespace App\Controller;
 
 
 use App\Service\MarkdownHelper;
+use App\Service\SlackClient;
 use Michelf\MarkdownInterface;
-use Nexy\Slack\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,19 +29,10 @@ class ArticleController extends AbstractController
      * @param MarkdownInterface $markdown
      * @return Response
      */
-    public function show($slug, MarkdownHelper $markdownHelper, $isDebug, Client $client)
+    public function show($slug, MarkdownHelper $markdownHelper, $isDebug, SlackClient $client)
     {
         if($slug === 'slack') {
-            $message = $client->createMessage();
-
-            $message
-                ->to('#testing')
-                ->from('John Doe')
-                ->withIcon(':ghost:')
-                ->setText('Something slacky!')
-            ;
-
-            $client->sendMessage($message);
+            $client->sendMessage('Sloth', 'This article is slack man');
         }
 
         $comments = [
