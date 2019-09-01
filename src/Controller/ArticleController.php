@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Service\MarkdownHelper;
 use Michelf\MarkdownInterface;
+use Nexy\Slack\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,8 +29,21 @@ class ArticleController extends AbstractController
      * @param MarkdownInterface $markdown
      * @return Response
      */
-    public function show($slug, MarkdownHelper $markdownHelper)
+    public function show($slug, MarkdownHelper $markdownHelper, $isDebug, Client $client)
     {
+        if($slug === 'slack') {
+            $message = $client->createMessage();
+
+            $message
+                ->to('#testing')
+                ->from('John Doe')
+                ->withIcon(':ghost:')
+                ->setText('Something slacky!')
+            ;
+
+            $client->sendMessage($message);
+        }
+
         $comments = [
             'Comment 1',
             'Comment 2',
@@ -54,7 +68,9 @@ fugiat.
 EOF;
 
 
-        $articleContent = $markdownHelper->parse($articleContent);
+        if(!$isDebug){
+            $articleContent = $markdownHelper->parse($articleContent);
+        }
 
         return $this->render('article/show.html.twig', [
             'slug' => $slug,
