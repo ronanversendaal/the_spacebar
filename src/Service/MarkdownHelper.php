@@ -29,6 +29,7 @@ class MarkdownHelper
 
     public function parse(string $source): string
     {
+        dd($this->cache);
         if(strpos($source, 'bacon') !== false){
             $this->logger->info('Talking bout bacon!');
         }
