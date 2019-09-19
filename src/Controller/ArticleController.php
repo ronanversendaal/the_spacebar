@@ -40,9 +40,9 @@ class ArticleController extends AbstractController
      * @param EntityManagerInterface $em
      * @return Response
      */
-    public function show($slug, MarkdownHelper $markdownHelper, $isDebug, SlackClient $client, EntityManagerInterface $em)
+    public function show(Article $article, MarkdownHelper $markdownHelper, $isDebug, SlackClient $client, EntityManagerInterface $em)
     {
-        if($slug === 'slack') {
+        if($article->getSlug() === 'slack') {
             $client->sendMessage('Sloth', 'This article is slack man');
         }
 
@@ -52,18 +52,7 @@ class ArticleController extends AbstractController
             'Comment 3',
         ];
 
-        $repository = $em->getRepository(Article::class);
-
-        /** @var Article $article */
-        $article = $repository->findOneBy(['slug' => $slug]);
-
-        if (!$article) {
-            throw $this->createNotFoundException(sprintf('No article for slug "%s"', $slug));
-        }
-
         return $this->render('article/show.html.twig', [
-            'slug' => $slug,
-            'title' => ucwords(str_replace('-', ' ', $slug)),
             'comments' => $comments,
             'article' => $article
         ]);
@@ -71,13 +60,16 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/news/{slug}/heart", name="article_toggle_heart")
+     * @param Article $article
+     * @param EntityManagerInterface $entityManager
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function toggleArticleHeart($slug, LoggerInterface $logger)
+    public function toggleArticleHeart(Article $article, EntityManagerInterface $entityManager)
     {
-        // TODO - actually heart/unheart the article!
+        $article->incrementHeartCount();
 
-        $logger->info('Run ./bin/console debug:autowiring to see the services you can inject.');
+        $entityManager->flush();
 
-        return $this->json(['hearts' => random_int(5, 100)]);
+        return $this->json(['hearts' => $article->getHeartCount()]);
     }
 }
