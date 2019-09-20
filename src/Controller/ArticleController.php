@@ -46,14 +46,7 @@ class ArticleController extends AbstractController
             $client->sendMessage('Sloth', 'This article is slack man');
         }
 
-        $comments = [
-            'Comment 1',
-            'Comment 2',
-            'Comment 3',
-        ];
-
         return $this->render('article/show.html.twig', [
-            'comments' => $comments,
             'article' => $article
         ]);
     }
