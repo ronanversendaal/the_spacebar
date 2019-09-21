@@ -58,15 +58,6 @@ EOF;
 
             $article->setImageFilename($this->faker->randomElement(self::$articleImages));
 
-
-            for($i = 0; $i < 2; $i++) {
-                $comment = new Comment();
-                $comment->setAuthorName($this->faker->randomElement(self::$articleAuthors));
-                $comment->setContent($this->faker->text);
-                $comment->setArticle($article);
-
-                $manager->persist($comment);
-            }
         });
 
         $manager->flush();
